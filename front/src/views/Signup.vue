@@ -1,56 +1,76 @@
 <template>
   <div class="mt-4">
     <b-form @submit.prevent="onSubmit">
-      <b-form-group id="input-group-name" label="Name:" label-for="name">
-        <b-form-input
-          id="name"
-          v-model="form.name"
-          type="text"
-          placeholder="Enter name"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-        id="input-group-email"
-        label="Email address:"
-        label-for="email"
-      >
-        <b-form-input
-          id="email"
-          v-model="form.email"
-          type="email"
-          placeholder="Enter email"
-          required
-        ></b-form-input>
-      </b-form-group>
+      <ValidationProvider name="Name" rules="required" v-slot="{ errors }">
+        <b-form-group id="input-group-name" label="Name:" label-for="name">
+          <b-form-input
+            id="name"
+            v-model="form.name"
+            type="text"
+            placeholder="Enter name"
+            required
+          ></b-form-input>
+          <vlidation-message :errors="errors" />
+        </b-form-group>
+      </ValidationProvider>
+      <ValidationProvider name="Email" rules="email" v-slot="{ errors }">
+        <b-form-group
+          id="input-group-email"
+          label="Email address:"
+          label-for="email"
+        >
+          <b-form-input
+            id="email"
+            v-model="form.email"
+            type="email"
+            placeholder="Enter email"
+            required
+          ></b-form-input>
+          <vlidation-message :errors="errors" />
+        </b-form-group>
+      </ValidationProvider>
 
-      <b-form-group
-        id="input-group-password"
-        label="Your Password:"
-        label-for="password"
+      <ValidationProvider
+        name="Password"
+        rules="required|min:4"
+        v-slot="{ errors }"
       >
-        <b-form-input
-          id="password"
-          v-model="form.password"
-          type="password"
-          placeholder="Enter password"
-          required
-        ></b-form-input>
-      </b-form-group>
+        <b-form-group
+          id="input-group-password"
+          label="Your Password:"
+          label-for="password"
+        >
+          <b-form-input
+            id="password"
+            v-model="form.password"
+            type="password"
+            placeholder="Enter password"
+            required
+          ></b-form-input>
+          <vlidation-message :errors="errors" />
+        </b-form-group>
+      </ValidationProvider>
 
-      <b-form-group
-        id="input-group-confirm-password"
-        label="Confirm your Password:"
-        label-for="confirm_password"
+      <ValidationProvider
+        name="Password"
+        rules="required|min:4"
+        v-slot="{ errors }"
       >
-        <b-form-input
-          id="confirm_password"
-          v-model="form.confirm_password"
-          type="password"
-          placeholder="Enter password"
-          required
-        ></b-form-input>
-      </b-form-group>
+        <b-form-group
+          id="input-group-confirm-password"
+          label="Confirm your Password:"
+          label-for="confirm_password"
+        >
+          <b-form-input
+            id="confirm_password"
+            v-model="form.confirm_password"
+            type="password"
+            placeholder="Enter password"
+            required
+          ></b-form-input>
+          <vlidation-message :errors="errors" />
+        </b-form-group>
+      </ValidationProvider>
 
       <b-button type="submit" variant="primary">Signup</b-button>
     </b-form>
@@ -63,7 +83,13 @@
 
 <script>
 import axios from "axios";
+import { ValidationProvider } from "vee-validate";
+import VlidationMessage from "../components/VlidationMessage.vue";
 export default {
+  components: {
+    ValidationProvider,
+    VlidationMessage
+  },
   data() {
     return {
       form: {
